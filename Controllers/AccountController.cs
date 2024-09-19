@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TaskManagementApp.ViewModels;
 
-namespace TaskManagementApp.Areas.Controllers
+namespace TaskManagementApp.Controllers
 {
     public class AccountController : Controller
     {
@@ -15,7 +15,6 @@ namespace TaskManagementApp.Areas.Controllers
             _userManager = userManager;
             _signInManager = signInManager;
         }
-
         public IActionResult Register()
         {
             return View();
@@ -34,16 +33,13 @@ namespace TaskManagementApp.Areas.Controllers
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction("Index", "Home");
                 }
-
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
-
             return View(model);
         }
-
         public IActionResult Login() => View();
 
         [HttpPost]

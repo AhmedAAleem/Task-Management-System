@@ -9,7 +9,6 @@ namespace TaskManagementApp.Services
     {
         private ApplicationDbContext ctx { get; set; }
         private RoleManager<IdentityRole> roleManager { get; set; }
-
         public UserRoleManager(ApplicationDbContext ctx, RoleManager<IdentityRole> roleManager)
         {
             this.ctx = ctx;

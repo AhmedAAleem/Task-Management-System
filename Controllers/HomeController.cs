@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using TaskManagementApp.Models;
 
-namespace TaskManagementApp.Areas.Controllers
+namespace TaskManagementApp.Controllers
 {
     public class HomeController : Controller
     {
@@ -12,17 +12,14 @@ namespace TaskManagementApp.Areas.Controllers
         {
             _logger = logger;
         }
-
         public IActionResult Index()
         {
             return View();
         }
-
         public IActionResult Privacy()
         {
             return View();
         }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

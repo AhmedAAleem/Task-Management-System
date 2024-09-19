@@ -11,7 +11,7 @@ using TaskManagementApp.Services.Interfaces;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using static TaskManagementApp.Models.Enums;
 
-namespace TaskManagementApp.Areas.Controllers
+namespace TaskManagementApp.Controllers
 {
     [Authorize]
     public class TasksController : Controller
@@ -19,8 +19,6 @@ namespace TaskManagementApp.Areas.Controllers
         private readonly ITaskService _taskService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext _context;
-
-
         public TasksController(ITaskService taskService, UserManager<ApplicationUser> userManager, ApplicationDbContext context)
         {
             _taskService = taskService;
@@ -28,7 +26,6 @@ namespace TaskManagementApp.Areas.Controllers
             _context = context;
         }
 
-        // GET: Tasks
         public async Task<IActionResult> Index()
         {
             var searchModel = await _taskService.GetTaskSearchForIndex(User.Identity.Name,
@@ -59,7 +56,6 @@ namespace TaskManagementApp.Areas.Controllers
             return View(searchModel);
         }
 
-        // GET: Tasks/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             var task = await _taskService.GetTaskDetails(id);
@@ -89,7 +85,6 @@ namespace TaskManagementApp.Areas.Controllers
             return View(task);
         }
 
-        // GET: Tasks/Create
         public async Task<IActionResult> Create(int? depndentId)
         {
             var PriorityList = Enum.GetValues<Priority>().Select(x => new { Id = (int)x, Name = x.ToString() }).OrderByDescending(x => x.Id).AsEnumerable();
@@ -104,7 +99,6 @@ namespace TaskManagementApp.Areas.Controllers
                 Text = t.Name
             }).ToList();
 
-            // Add the default "Select" item
             teamList.Insert(0, new SelectListItem
             {
                 Value = "",
@@ -119,7 +113,6 @@ namespace TaskManagementApp.Areas.Controllers
                 Text = t.UserName
             }).ToList();
 
-            // Add the default "Select" item
             userList.Insert(0, new SelectListItem
             {
                 Value = "",
@@ -135,7 +128,6 @@ namespace TaskManagementApp.Areas.Controllers
             });
         }
 
-        // POST: Tasks/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Title,Description,status,TeamId,UserId,DepentTaskId,Priority")] Data.Task task)
@@ -145,12 +137,9 @@ namespace TaskManagementApp.Areas.Controllers
                 await _taskService.CreateTask(task);
                 return RedirectToAction(nameof(Index));
             }
-
-            // Logic for preparing dropdowns can remain here
             return View(task);
         }
 
-        // GET: Tasks/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             var task = await _taskService.GetTaskDetails(id);
@@ -158,7 +147,6 @@ namespace TaskManagementApp.Areas.Controllers
             {
                 return NotFound();
             }
-
             var PriorityList = Enum.GetValues<Priority>().Select(x => new { Id = (int)x, Name = x.ToString() }).OrderByDescending(x => x.Id);
             ViewData["PriorityList"] = new SelectList(PriorityList, "Id", "Name");
             var statusList = Enum.GetValues<Status>().Select(x => new { Id = (int)x, Name = x.ToString() });
@@ -171,14 +159,12 @@ namespace TaskManagementApp.Areas.Controllers
                 Selected= t.Id == task.TeamId
             }).ToList();
 
-            // Add the default "Select" item
             teamList.Insert(0, new SelectListItem
             {
                 Value = "",
                 Text = "Select"
             });
             ViewData["TeamId"] = new SelectList(teamList, "Value", "Text");
-            //ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "Name", task.TeamId);
 
             var userList = _context.Users.Select(t => new SelectListItem
             {
@@ -187,21 +173,18 @@ namespace TaskManagementApp.Areas.Controllers
                 Selected= t.Id == task.UserId
             }).ToList();
 
-            // Add the default "Select" item
             userList.Insert(0, new SelectListItem
             {
-                Value = "",
+                Value = "0",
                 Text = "Select"
                 
             });
             ViewData["UserId"] = new SelectList(userList, "Value", "Text");
             ViewBag.TeamsUsers = _context.TeamUsers.ToList();
 
-            //ViewData["UserId"] = new SelectList(_context.Users, "Value", "Text", task.UserId);
             return View(task);
         }
 
-        // POST: Tasks/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Status,TeamId,UserId,DepentTaskId,Priority")] Data.Task task)
@@ -210,18 +193,13 @@ namespace TaskManagementApp.Areas.Controllers
             {
                 return NotFound();
             }
-
             if (ModelState.IsValid)
             {
                 await _taskService.UpdateTask(task);
                 return RedirectToAction(nameof(Index));
             }
-
-            // Logic for preparing dropdowns can remain here
             return View(task);
         }
-
-        // GET: Tasks/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             var task = await _taskService.GetTaskDetails(id);
@@ -232,7 +210,6 @@ namespace TaskManagementApp.Areas.Controllers
             return View(task);
         }
 
-        // POST: Tasks/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

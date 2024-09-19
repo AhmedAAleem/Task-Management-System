@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using TaskManagementApp.Data;
 using TaskManagementApp.Services.Interfaces;
 
-namespace TaskManagementApp.Areas.Controllers
+namespace TaskManagementApp.Controllers
 {
     public class CommentsController : Controller
     {
@@ -17,9 +17,6 @@ namespace TaskManagementApp.Areas.Controllers
             _commentService = commentService;
             _context = context;
         }
-
- 
-
         public async Task<IActionResult> Index(int id)
         {
             var comments = await _commentService.GetCommentsByTaskId(id);
@@ -27,7 +24,6 @@ namespace TaskManagementApp.Areas.Controllers
             return View(comments);
         }
 
-        // GET: Comments/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             var comment = await _commentService.GetCommentDetails(id);
@@ -38,7 +34,6 @@ namespace TaskManagementApp.Areas.Controllers
             return View(comment);
         }
 
-        // GET: Comments/Create
         public IActionResult Create(int id)
         {
             ViewBag.tasks = new SelectList(_context.Tasks, "Id", "Title",id);
@@ -47,7 +42,6 @@ namespace TaskManagementApp.Areas.Controllers
             return View();
         }
 
-        // POST: Comments/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Content,CreatedAt,UserId,TaskId")] Comment comment)
@@ -64,7 +58,6 @@ namespace TaskManagementApp.Areas.Controllers
             return View(comment);
         }
 
-        // GET: Comments/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             var comment = await _commentService.GetCommentDetails(id);
@@ -78,7 +71,6 @@ namespace TaskManagementApp.Areas.Controllers
             return View(comment);
         }
 
-        // POST: Comments/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Content,CreatedAt,UserId,TaskId")] Comment comment)
@@ -113,7 +105,6 @@ namespace TaskManagementApp.Areas.Controllers
             return View(comment);
         }
 
-        // GET: Comments/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             var comment = await _commentService.GetCommentDetails(id);
@@ -125,7 +116,6 @@ namespace TaskManagementApp.Areas.Controllers
             return View(comment);
         }
 
-        // POST: Comments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id, int taskId)

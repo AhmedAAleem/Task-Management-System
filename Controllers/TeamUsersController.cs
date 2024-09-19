@@ -6,28 +6,23 @@ using TaskManagementApp.IServices;
 using TaskManagementApp.Models;
 
 
-namespace TaskManagementApp.Areas.Controllers
+namespace TaskManagementApp.Controllers
 {
     public class TeamUsersController : Controller
     {
         private readonly ITeamUserService _teamUserService;
         private readonly UserManager<ApplicationUser> _userManager;
-
         public TeamUsersController(ITeamUserService teamUserService, UserManager<ApplicationUser> userManager)
         {
             _teamUserService = teamUserService;
             _userManager = userManager;
         }
-
-        // GET: TeamUsers
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
             var teamUsers = await _teamUserService.GetTeamUsersAsync(user, User.IsInRole("Admin"));
             return View(teamUsers);
         }
-
-        // GET: TeamUsers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
@@ -38,14 +33,12 @@ namespace TaskManagementApp.Areas.Controllers
             return View(teamUser);
         }
 
-        // GET: TeamUsers/Create
         public async Task<IActionResult> Create()
         {
             await PopulateViewBags();
             return View(new TeamUsersModel());
         }
 
-        // POST: TeamUsers/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,TeamId,UserId")] TeamUsersModel teamUsersModel)
@@ -61,8 +54,6 @@ namespace TaskManagementApp.Areas.Controllers
             await PopulateViewBags(teamUsersModel.TeamId, teamUsersModel.UserId);
             return View(teamUsersModel);
         }
-
-        // GET: TeamUsers/Edit/5
         public async Task<IActionResult> Edit(int? id, int? teamId)
         {
             if (id == null) return NotFound();
@@ -74,7 +65,6 @@ namespace TaskManagementApp.Areas.Controllers
             return View(teamUsersModel);
         }
 
-        // POST: TeamUsers/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,TeamId,UserId")] TeamUsersModel teamUsersModel)
@@ -90,8 +80,6 @@ namespace TaskManagementApp.Areas.Controllers
             await PopulateViewBags(teamUsersModel.TeamId, teamUsersModel.UserId);
             return View(teamUsersModel);
         }
-
-        // GET: TeamUsers/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
@@ -102,7 +90,6 @@ namespace TaskManagementApp.Areas.Controllers
             return View(teamUsersModel);
         }
 
-        // POST: TeamUsers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -112,7 +99,6 @@ namespace TaskManagementApp.Areas.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-
         private async Task PopulateViewBags(int? teamId = null, List<string> userId = null)
         {
             ViewBag.TeamId = new SelectList(await _teamUserService.GetTeamsAsync(), "Id", "Name", teamId);

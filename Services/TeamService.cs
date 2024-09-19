@@ -11,12 +11,10 @@ namespace TaskManagementApp.Services
     public class TeamService : ITeamService
     {
         private readonly ApplicationDbContext _context;
-
         public TeamService(ApplicationDbContext context)
         {
             _context = context;
         }
-
         public async Task<List<Team>> GetTeamsAsync()
         {
             return await _context.Teams.ToListAsync();
@@ -38,7 +36,6 @@ namespace TaskManagementApp.Services
             }
             await _context.SaveChangesAsync();
         }
-
         public async Task<bool> UpdateTeamAsync(Team team)
         {
             if (team.UserIds.Count>0)
@@ -64,7 +61,6 @@ namespace TaskManagementApp.Services
                 throw;
             }
         }
-
         public async Task<(bool status,string msg)> DeleteTeamAsync(int id)
         {
             var team = await GetTeamByIdAsync(id);
@@ -78,7 +74,6 @@ namespace TaskManagementApp.Services
 
             return (true,"");
         }
-
         private async Task<bool> TeamExistsAsync(int id)
         {
             return await _context.Teams.AnyAsync(e => e.Id == id);

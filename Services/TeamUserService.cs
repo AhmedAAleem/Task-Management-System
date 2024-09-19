@@ -13,7 +13,6 @@ namespace TaskManagementApp.Services
     public class TeamUserService : ITeamUserService
     {
         private readonly ApplicationDbContext _context;
-
         public TeamUserService(ApplicationDbContext context)
         {
             _context = context;
@@ -41,7 +40,6 @@ namespace TaskManagementApp.Services
 
             return teamUsers.ToList();
         }
-
         public async Task<TeamUsersModel> GetTeamUserByIdAsync(int id)
         {
             var teamUser = await _context.TeamUsers
@@ -58,7 +56,6 @@ namespace TaskManagementApp.Services
                 Users = _context.TeamUsers.Where(x => x.TeamId == teamUser.TeamId).Select(x => x.User).ToList()
             };
         }
-
         public async Task<bool> CreateTeamUsersAsync(TeamUsersModel model)
         {
             if (!_context.TeamUsers.Any(x => x.TeamId == model.TeamId))
@@ -73,7 +70,6 @@ namespace TaskManagementApp.Services
             }
             return false;
         }
-
         public async Task<TeamUsersModel> GetTeamUsersForEditAsync(int id, int? teamId)
         {
             var teamUsers = await _context.TeamUsers.FindAsync(id) ?? new TeamUsers { TeamId = teamId.Value };
@@ -82,7 +78,6 @@ namespace TaskManagementApp.Services
 
             return new TeamUsersModel { Id = id, TeamId = teamUsers.TeamId, UserId = users };
         }
-
         public async Task<bool> UpdateTeamUsersAsync(TeamUsersModel model)
         {
             var existingUsers = _context.TeamUsers.Where(x => x.TeamId == model.TeamId);
@@ -97,7 +92,6 @@ namespace TaskManagementApp.Services
             await _context.SaveChangesAsync();
             return true;
         }
-
         public async Task<TeamUsersModel> GetTeamUsersForDeleteAsync(int id)
         {
             var teamUser = await _context.TeamUsers
@@ -114,7 +108,6 @@ namespace TaskManagementApp.Services
                 Users = _context.TeamUsers.Where(x => x.TeamId == teamUser.TeamId).Select(x => x.User).ToList()
             };
         }
-
         public async Task<bool> DeleteTeamUsersAsync(int id)
         {
             var teamUsers = await _context.TeamUsers.FindAsync(id);
@@ -131,7 +124,6 @@ namespace TaskManagementApp.Services
         {
             return await _context.Teams.ToListAsync();
         }
-
         public async Task<List<ApplicationUser>> GetUsersAsync()
         {
             return await _context.Users.ToListAsync();

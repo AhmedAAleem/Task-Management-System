@@ -16,7 +16,6 @@ namespace TaskManagementApp.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
-
         public TaskService(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
@@ -55,7 +54,6 @@ namespace TaskManagementApp.Services
                 TeamsList = teamslist
             };
         }
-
         public async Task<TaskManagementApp.Data.Task> GetTaskDetails(int? id)
         {
             if (id == null) return null;
@@ -66,19 +64,16 @@ namespace TaskManagementApp.Services
                                  .Include(t => t.Comments)
                                  .FirstOrDefaultAsync(m => m.Id == id);
         }
-
         public async System.Threading.Tasks.Task CreateTask(TaskManagementApp.Data.Task task)
         {
             await _context.AddAsync(task);
             await _context.SaveChangesAsync();
         }
-
         public async System.Threading.Tasks.Task UpdateTask(TaskManagementApp.Data.Task task)
         {
             _context.Update(task);
             await _context.SaveChangesAsync();
         }
-
         public async System.Threading.Tasks.Task DeleteTask(int id)
         {
             var task = await _context.Tasks.FindAsync(id);
@@ -92,7 +87,6 @@ namespace TaskManagementApp.Services
                 await _context.SaveChangesAsync();
             }
         }
-
         public bool TaskExists(int id)
         {
             return _context.Tasks.Any(e => e.Id == id);

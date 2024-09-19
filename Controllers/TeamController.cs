@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using TaskManagementApp.Services.Interfaces;
 using TaskManagementApp.Services;
 
-namespace TaskManagementApp.Areas.Controllers
+namespace TaskManagementApp.Controllers
 {
     [Authorize(Roles = "Admin,TeamLead")]
     public class TeamsController : Controller
@@ -23,14 +23,12 @@ namespace TaskManagementApp.Areas.Controllers
             _context = context;
         }
 
-        // GET: Teams
         public async Task<IActionResult> Index()
         {
             var teams = await _teamService.GetTeamsAsync();
             return View(teams);
         }
 
-        // GET: Teams/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
@@ -41,7 +39,6 @@ namespace TaskManagementApp.Areas.Controllers
             return View(team);
         }
 
-        // GET: Teams/Create
         public IActionResult Create()
         {
 
@@ -50,7 +47,6 @@ namespace TaskManagementApp.Areas.Controllers
             return View();
         }
 
-        // POST: Teams/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Team team)       
@@ -62,8 +58,6 @@ namespace TaskManagementApp.Areas.Controllers
             }
             return View(team);
         }
-
-        // GET: Teams/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
@@ -85,7 +79,6 @@ namespace TaskManagementApp.Areas.Controllers
             return View(team);
         }
 
-        // POST: Teams/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Team team)
@@ -99,8 +92,6 @@ namespace TaskManagementApp.Areas.Controllers
             }
             return View(team);
         }
-
-        // GET: Teams/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
@@ -111,7 +102,6 @@ namespace TaskManagementApp.Areas.Controllers
             return View(team);
         }
 
-        // POST: Teams/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

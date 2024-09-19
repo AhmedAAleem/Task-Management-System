@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using TaskManagementApp.IServices;
 using TaskManagementApp.Models;
 
-namespace TaskManagementApp.Areas.Controllers
+namespace TaskManagementApp.Controllers
 {
     [Authorize(Roles = "Admin")]
     public class UserController : Controller
@@ -16,7 +16,6 @@ namespace TaskManagementApp.Areas.Controllers
         private readonly IUserService _userService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-
         public UserController(IUserService userService,
                               UserManager<ApplicationUser> userManager,
                               SignInManager<ApplicationUser> signInManager)
@@ -26,14 +25,12 @@ namespace TaskManagementApp.Areas.Controllers
             _signInManager = signInManager;
         }
 
-        // GET: UserController
         public async Task<ActionResult> Index()
         {
             var users = await _userService.GetAllUsersAsync();
             return users != null ? View(users) : Problem("Entity set is null.");
         }
 
-        // GET: UserController/Edit/5
         public async Task<ActionResult> EditAsync(string id)
         {
             var user = await _userService.GetUserForEditAsync(id);
@@ -46,7 +43,6 @@ namespace TaskManagementApp.Areas.Controllers
             return View(user);
         }
 
-        // POST: UserController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> EditAsync(string id, IFormCollection collection)
@@ -68,14 +64,12 @@ namespace TaskManagementApp.Areas.Controllers
             }
         }
 
-        // GET: UserController/Delete/5
         public async Task<ActionResult> Delete(string id)
         {
             var user = await _userService.GetUserByIdAsync(id);
             return user == null ? NotFound() : View(user);
         }
 
-        // POST: UserController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(string id, IFormCollection collection)

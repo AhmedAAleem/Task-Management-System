@@ -8,8 +8,6 @@ using TaskManagementApp.Data;
 using TaskManagementApp.IServices;
 using TaskManagementApp.Models;
 
-
-
 namespace TaskManagementApp.Services
 {
     public class UserService : IUserService
@@ -61,21 +59,18 @@ namespace TaskManagementApp.Services
                 var roleId = collection["RoleId"].ToString();
                 var newRole = _roleManager.Roles.FirstOrDefault(r=>r.Id== roleId);
 
-                // Remove old role(s)
                 foreach (var role in currentRoles)
                 {
                     await _userManager.RemoveFromRoleAsync(user, role);
                 }
                 if (newRole != null)
                 {
-                    // Add new role
                     if (await _roleManager.RoleExistsAsync(newRole.Name))
                     {
                         await _userManager.AddToRoleAsync(user, newRole.Name);
                     }
 
                 }
-                // Update username
                 user.UserName = collection["UserName"].ToString();
                 user.RoleId = roleId;
                 await _userManager.UpdateAsync(user);
@@ -95,7 +90,6 @@ namespace TaskManagementApp.Services
             }
             return false;
         }
-
         public async Task<bool> IsCurrentUserAsync(string currentUserName, string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
