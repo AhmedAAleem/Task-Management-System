@@ -1,0 +1,111 @@
+﻿@model TaskManagementApp.Models.TaskSearchModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</p>
+
+<form asp-action="Index">
+    <div class="row">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group col-md-3">
+            <label asp-for="title" class="control-label"></label>
+            <input asp-for="title" class="form-control" />
+        </div>
+        <div class="form-group col-md-3">
+            <label asp-for="statusId" class="control-label"></label>
+            <select asp-for="statusId" class="form-control" asp-items="@Model.statusList"></select>
+        </div>
+        <div class="form-group col-md-3">
+            <label asp-for="TeamId" class="control-label"></label>
+            <select asp-for="TeamId" class="form-control" asp-items="@Model.TeamsList"></select>
+        </div>
+        <div class="form-group col-md-3">
+            <input type="submit" value="Search" class="btn btn-primary mt-4" />
+        </div>
+    </div>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Tasks.FirstOrDefault().Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tasks.FirstOrDefault().Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tasks.FirstOrDefault().Team)
+            </th>
+            @if (!User.IsInRole("User"))
+            {
+                <th>
+                    @Html.DisplayNameFor(model => model.Tasks.FirstOrDefault().User)
+                </th>
+            }
+            <th>
+                @Html.DisplayNameFor(model => model.Tasks.FirstOrDefault().Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tasks.FirstOrDefault().Priority)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Tasks)
+        {
+            var tdBgColor = "";
+            switch (item.Priority)
+            {
+                case Enums.Priority.High:
+                    tdBgColor = "style=background-color:#ff3333";
+                    break;
+                case Enums.Priority.Medium:
+                    tdBgColor = "style=background-color:#cc33ff";
+                    break;
+                case Enums.Priority.Low:
+                default:
+                    tdBgColor = "style=background-color:#3333ff";
+                    break;
+            }
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Team.Name)
+                </td>
+                @if (!User.IsInRole("User"))
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.User.UserName)
+                    </td>
+                }
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    <button disabled class="btn" @tdBgColor>
+                        <span class="text-white">@item.Priority</span>
+                    </button>
+                </td>
+                <td>
+                    <a asp-action="Edit" class="btn btn-warning" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" class="btn btn-secondary" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
